@@ -19,8 +19,8 @@ const createBlog = async (req, res) => {
       return res.status(401).send({ status: false, msg: "Permission Denied for this User" })
   }
   if (isPublished==true){
-   publishedAt=Date.now()}
-   
+   publishedAt=new Date()}
+
     let blogCreated = await blogModel.create(Blog);
     res.status(201).send({ status: true, data: blogCreated });
   } catch (error) {
