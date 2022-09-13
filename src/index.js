@@ -2,7 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const route = require("./router/route.js");
 const monogoose = require("mongoose");
-const { use } = require("./router/route.js");
 const app = express();
 
 app.use(bodyParser.json());
