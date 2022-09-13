@@ -8,7 +8,7 @@ const createBlog = async (req, res) => {
     if (Object.keys(Blog).length == 0) {
       return res.status(400).send({ status: false, msg: "Invalid request Please provide valid blog details", });
     }
-    let { title, body, authorId, category, publishedAt, isPublished } = Blog;
+    let { title, body, authorId, category, isPublished } = Blog;
     if (!title) return res.status(400).send({ status: false ,msg: " title is required " });
     if (!body) return res.status(400).send({status: false , msg: "body is required " });
     if (!authorId) return res.status(400).send({status: false, msg: " authorId is required " });
@@ -18,8 +18,10 @@ const createBlog = async (req, res) => {
     if (requestUserId !== req.loggedInUser) {
       return res.status(401).send({ status: false, msg: "Permission Denied for this User" })
   }
-  if (isPublished==true){
-   publishedAt=new Date()}
+  if (isPublished === true) {
+    Blog['publishedAt'] = new Date()
+}
+
 
     let blogCreated = await blogModel.create(Blog);
     res.status(201).send({ status: true, data: blogCreated });
