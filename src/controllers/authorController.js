@@ -1,6 +1,9 @@
 const authorModel = require("../Models/authorModels");
 const validation = require("email-validator");
 const jwt = require("jsonwebtoken")
+const isvalidTitle=function(title){
+
+}
 
 const createAuthor = async function (req, res) {
   let author = req.body;
@@ -18,11 +21,18 @@ const createAuthor = async function (req, res) {
       res.status(400).send({ status: false, msg: "The request is missing a mandatory Last Name !" });
     } else if (!title) {
       res.status(400).send({ status: false, msg: "The request is missing a mandatory Title !" });
-    } else if (!email) {
+    } 
+    let validTitle = ['Mr', 'Mrs', 'Miss']; //validating the title
+    //checking if the title is valid
+    if (!validTitle.includes(title)) {
+      return res.status(400).send({ status: false, msg: "title should be one of Mr, Mrs, Miss" });
+    }
+    
+    else if (!email) {
       res.status(400).send({ status: false, msg: "The request is missing a mandatory email !" });
     } else if (!validation.validate(email)) {
       res.status(400).send({ status: false, msg: "please use right format in your email ID" });
-    } else if (email == authorModel.find(email)) {
+    } else if (email ==await authorModel.find({email})) {
       res.status(400).send({ status: false, msg: "Please give another email Id, email id is already present" });
     } else if (!pw) {
       res.status(400).send({ status: false, msg: "The request is missing a mandatory Password" });

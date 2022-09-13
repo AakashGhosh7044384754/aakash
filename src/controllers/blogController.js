@@ -8,21 +8,26 @@ const createBlog = async (req, res) => {
     if (Object.keys(Blog).length == 0) {
       return res.status(400).send({ status: false, msg: "Invalid request Please provide valid blog details", });
     }
-    if (!Blog.title) return res.status(400).send({ msg: " title is required " });
-    if (!Blog.body) return res.status(400).send({ msg: "body is required " });
-    if (!Blog.authorId) return res.status(400).send({ msg: " authorId is required " });
-    if (!Blog.category) return res.status(400).send({ msg: " category is require" });
-    let requestUserId = req.body.authorId
+    let { title, body, authorId, category, publishedAt, isPublished } = Blog;
+    if (!title) return res.status(400).send({ status: false ,msg: " title is required " });
+    if (!body) return res.status(400).send({status: false , msg: "body is required " });
+    if (!authorId) return res.status(400).send({status: false, msg: " authorId is required " });
+    if (!category) return res.status(400).send({status: false, msg: " category is require" });
+  
+    let requestUserId =authorId
     if (requestUserId !== req.loggedInUser) {
       return res.status(401).send({ status: false, msg: "Permission Denied for this User" })
-
-    }
+  }
+  if (isPublished==true){
+   publishedAt=Date.now()}
+   
     let blogCreated = await blogModel.create(Blog);
     res.status(201).send({ status: true, data: blogCreated });
   } catch (error) {
-    res.status(500).send({ msg: error.message });
+    res.status(500).send({status: false, msg: error.message });
   }
 };
+
 //-------------------------------------------------------------------------------------------------------------------//
 const getBlogs = async function (req, res) {
   try {
@@ -54,7 +59,7 @@ const updateBlog = async function(req, res){
 
     let inputId = req.params.blogId;
     let isValid = mongoose.Types.ObjectId.isValid(inputId);
-    if (!isValid) return res.status(400).send({ msg: "enter valid objectID" });
+    if (!isValid) return res.status(400).send({status: false, msg: "enter valid objectID" });
 
     let reqBody = req.body;
     let title = req.body.title;
@@ -70,7 +75,7 @@ const updateBlog = async function(req, res){
     let allDate = date.toString();
 
     let alert = await blogModel.findOne({ _id: inputId, isDeleted: true });
-    if (alert) return res.status(400).send({ msg: "Blog is already deleted" });
+    if (alert) return res.status(400).send({status: false, msg: "Blog is already deleted" });
 
     let blogs = await blogModel.findOneAndUpdate(
       { _id: inputId },
@@ -87,9 +92,9 @@ const updateBlog = async function(req, res){
     );
 
     if (!blogs) return res.status(404).send({ msg: "no blog found" });
-    res.status(200).send({ msg: blogs });
+    res.status(200).send({status: true, msg: blogs });
   } catch (error) {
-    res.status(500).send({ msg: error.message });
+    res.status(500).send({status: false, msg: error.message });
   }
 };
 //-------------------------------------------------------------------------------------------------------------------//
@@ -98,7 +103,7 @@ const deleteBlog = async (req, res) => {
     let inputId = req.params.blogId;
 
     let isValid = mongoose.Types.ObjectId.isValid(inputId);
-    if (!isValid) return res.status(400).send({ msg: "enter valid object tid" });
+    if (!isValid) return res.status(400).send({status: false, msg: "enter valid object tid" });
 
     let date = Date.now();
     let alltdate = date.toString();
@@ -108,7 +113,7 @@ const deleteBlog = async (req, res) => {
       isDeleted: true,
     });
     if (deleteAlert)
-      return res.status(404).send({ msg: "This blog is already deleted" });
+      return res.status(404).send({status: false, msg: "This blog is already deleted" });
 
     let updateData = await blogModel.findOneAndUpdate(
       { _id: inputId },
@@ -117,11 +122,11 @@ const deleteBlog = async (req, res) => {
     );
 
     if (!updateData)
-      return res.status(404).send({ msg: "This document dose not exist" });
+      return res.status(404).send({status: false, msg: "This document dose not exist" });
 
     res.status(200).send({ status: true, msg: updateData });
   } catch (error) {
-    res.status(500).send({ msg: error.message });
+    res.status(500).send({status: false, msg: error.message });
   }
 };
 //-------------------------------------------------------------------------------------------------------------------//
