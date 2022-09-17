@@ -31,7 +31,7 @@ const createInterns = async function (req, res) {
             return res.status(400).send({ status: false, message: "email is already exist" })
         }
         if (!mobile) {
-            res.status(400).send({ status: false, message: "Mobile Number is mandatory" })
+          return  res.status(400).send({ status: false, message: "Mobile Number is mandatory" })
         }
         if (!mobile.match(mobileRegex)) {
             return res.status(400).send({ status: false, message: "Mobile Number is invalid" })

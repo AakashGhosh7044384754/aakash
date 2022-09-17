@@ -13,13 +13,13 @@ const createColleges = async function (req, res) {
             return res.status(400).send({ status: false, message: "please enter Data" });
         }
         if (dataBody.length > 4) {
-            return res.status(400).send({ status: false, mssg: "Only name, fullName, logoLink, and idDeleted are allowed in the request body" })
+            return res.status(400).send({ status: false, message: "Only name, fullName, logoLink, and idDeleted are allowed in the request body" })
         }
         if (!name) {
             return res.status(400).send({ status: false, message: "name is required" });
         }
         if (name.includes(" ")) {
-            return res.status(400).send({ status: false, msg: "Space is not allowed" })
+            return res.status(400).send({ status: false, message: "Space is not allowed" })
         }
         let nameAlreadyExist = await collegeModel.findOne({ name: name });
         if (nameAlreadyExist) {
