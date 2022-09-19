@@ -2,6 +2,7 @@ const internModel = require('../models/internModel')
 const collegeModel = require('../models/collegeModel')
 
 const createInterns = async function (req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*')
     try {
 
         const emailRegex = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/
