@@ -90,7 +90,7 @@ let getProducts = async function (req, res) {
             filter.availableSizes = { $all: size }
         }
         if (name) {
-            filter["title"] = { $regex: name }
+            filter.title = { $regex: name }
         }
         if (priceLessThan) {
             if (!validPrice(priceLessThan)) {
